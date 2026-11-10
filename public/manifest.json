@@ -1,0 +1,22 @@
+{
+  "name": "Cipher Digitals",
+  "short_name": "Cipher",
+  "description": "Global Temporary Numbers, VPN & eSIM",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#4287F5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ]
+}
