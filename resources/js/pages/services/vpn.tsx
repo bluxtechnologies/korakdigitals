@@ -133,8 +133,23 @@ export default function SecureVpn() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <Badge variant="success" dot statusIcon="check">Zero Logs Policy</Badge>
-                        <span className="text-[10px] text-text-muted">Nodes updated live</span>
+                        <Badge variant="neutral">Service Paused</Badge>
+                        <span className="text-[10px] text-text-muted">Under maintenance</span>
+                    </div>
+                </div>
+
+                {/* Deactivated Service Notice */}
+                <div className="p-4 rounded-xl border border-border-subtle bg-bg-surface flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2.5 text-text-secondary font-medium">
+                        <span className="text-sm">⚠️</span>
+                        <span>
+                            <strong className="text-text-primary">Service Deactivated:</strong> Secure VPN is currently paused for network upgrades. Our active services are <strong className="text-text-primary">Mobile Data</strong> and <strong className="text-text-primary">Airtime</strong>.
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                        <Link href="/user/services/data" className="text-xs font-bold text-brand hover:underline">
+                            Go to Mobile Data →
+                        </Link>
                     </div>
                 </div>
 
@@ -198,12 +213,12 @@ export default function SecureVpn() {
                                 />
 
                                 <Button
-                                    type="submit"
-                                    variant="primary"
-                                    className="w-full text-xs font-bold shadow-sm py-2.5 mt-2"
-                                    disabled={flow.isProcessing}
+                                    type="button"
+                                    variant="outline"
+                                    className="w-full text-xs font-bold py-2.5 mt-2 opacity-60 cursor-not-allowed"
+                                    disabled={true}
                                 >
-                                    Generate Dedicated VPN Key ({currencySymbol}{isUsd ? price.toFixed(2) : price.toLocaleString()})
+                                    Service Currently Deactivated
                                 </Button>
                             </form>
                         </div>

@@ -20,7 +20,8 @@ import {
     CheckCircle2,
     Smartphone,
     Loader2,
-    Receipt
+    Receipt,
+    Globe
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -428,20 +429,23 @@ export default function Dashboard() {
                             </div>
                         </Link>
 
-                        {/* 3: Social */}
+                        {/* 3: Global eSIM (Coming Soon) */}
                         <Link
-                            href="/user/services/growth"
-                            className="group bg-bg-surface border border-border-subtle hover:border-brand/40 rounded-xl p-4 sm:p-5 flex flex-col justify-between gap-4 shadow-xs hover:shadow-sm transition-transform duration-150 cursor-pointer active:scale-[0.96]"
+                            href="/user/services/esim"
+                            className="group bg-bg-surface border border-border-subtle hover:border-brand/40 rounded-xl p-4 sm:p-5 flex flex-col justify-between gap-4 shadow-xs hover:shadow-sm transition-transform duration-150 cursor-pointer active:scale-[0.96] relative"
                         >
+                            <span className="absolute top-3 right-3 text-[9px] font-bold text-brand bg-brand-subtle border border-brand/20 px-2 py-0.5 rounded-full">
+                                Coming Soon
+                            </span>
                             <div className="w-10 h-10 rounded-full bg-brand-subtle text-brand flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
-                                <TrendingUp size={18} aria-hidden="true" />
+                                <Globe size={18} aria-hidden="true" />
                             </div>
                             <div>
                                 <h3 className="text-sm font-bold text-text-primary group-hover:text-brand transition-colors">
-                                    Social
+                                    Global eSIM
                                 </h3>
                                 <p className="text-[11px] text-text-muted mt-1 leading-snug line-clamp-2">
-                                    Social accounts, boosting and more
+                                    International travel data profiles
                                 </p>
                             </div>
                             <div className="flex items-center text-text-muted group-hover:text-brand transition-colors pt-1">
@@ -449,9 +453,9 @@ export default function Dashboard() {
                             </div>
                         </Link>
 
-                        {/* 4: More */}
+                        {/* 4: All Services */}
                         <Link
-                            href="/user/numbers"
+                            href="/user/services"
                             className="group bg-bg-surface border border-border-subtle hover:border-brand/40 rounded-xl p-4 sm:p-5 flex flex-col justify-between gap-4 shadow-xs hover:shadow-sm transition-transform duration-150 cursor-pointer active:scale-[0.96]"
                         >
                             <div className="w-10 h-10 rounded-full bg-bg-base border border-border-subtle text-text-secondary flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
@@ -459,10 +463,10 @@ export default function Dashboard() {
                             </div>
                             <div>
                                 <h3 className="text-sm font-bold text-text-primary group-hover:text-brand transition-colors">
-                                    More
+                                    All Services
                                 </h3>
                                 <p className="text-[11px] text-text-muted mt-1 leading-snug line-clamp-2">
-                                    Explore all services
+                                    View service directory &amp; status
                                 </p>
                             </div>
                             <div className="flex items-center text-text-muted group-hover:text-brand transition-colors pt-1">

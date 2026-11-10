@@ -140,8 +140,23 @@ export default function SocialGrowth() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <Badge variant="success" dot statusIcon="check">Live Instant Delivery</Badge>
-                        <span className="text-[10px] text-text-muted">Updated today</span>
+                        <Badge variant="neutral">Service Paused</Badge>
+                        <span className="text-[10px] text-text-muted">Under maintenance</span>
+                    </div>
+                </div>
+
+                {/* Deactivated Service Notice */}
+                <div className="p-4 rounded-xl border border-border-subtle bg-bg-surface flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2.5 text-text-secondary font-medium">
+                        <span className="text-sm">⚠️</span>
+                        <span>
+                            <strong className="text-text-primary">Service Deactivated:</strong> Social Growth is currently paused for system upgrades. Our working services are <strong className="text-text-primary">Mobile Data</strong> and <strong className="text-text-primary">Airtime</strong>.
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                        <Link href="/user/services/data" className="text-xs font-bold text-brand hover:underline">
+                            Go to Mobile Data →
+                        </Link>
                     </div>
                 </div>
 
@@ -240,12 +255,12 @@ export default function SocialGrowth() {
                                 </div>
 
                                 <Button
-                                    type="submit"
-                                    variant="primary"
-                                    className="w-full text-xs font-bold shadow-sm py-2.5 mt-2"
-                                    disabled={flow.isProcessing}
+                                    type="button"
+                                    variant="outline"
+                                    className="w-full text-xs font-bold py-2.5 mt-2 opacity-60 cursor-not-allowed"
+                                    disabled={true}
                                 >
-                                    Continue &amp; Confirm Order ({currencySymbol}{estimatedPrice.toLocaleString(undefined, { minimumFractionDigits: isUsd ? 2 : 0, maximumFractionDigits: 2 })})
+                                    Service Currently Deactivated
                                 </Button>
                             </form>
                         </div>

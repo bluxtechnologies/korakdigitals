@@ -1,256 +1,239 @@
 import * as React from 'react';
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import AppShell from '@/components/layout/AppShell';
-import { Button } from '@/components/ui/Button';
-import { Select } from '@/components/ui/Select';
-import { Badge } from '@/components/ui/Badge';
 import { useToast } from '@/components/ui/Toast';
-import { GlobeIcon } from '@/components/ui/Icons';
 import {
-    useTransactionFlow,
-    TransactionFlowModal,
-    UniversalTransactionData,
-} from '@/components/transaction';
+    Globe,
+    QrCode,
+    Sparkles,
+    ShieldCheck,
+    Wifi,
+    Phone,
+    ArrowRight,
+    CheckCircle2,
+    Clock,
+    Send
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const REGIONS = [
-    { value: 'usa', label: 'United States & Canada', code: 'US', priceNgn: 4500, priceUsd: 3.10 },
-    { value: 'europe', label: 'Europe Regional (34 Countries)', code: 'EU', priceNgn: 5200, priceUsd: 3.60 },
-    { value: 'asia', label: 'Asia-Pacific Regional', code: 'AP', priceNgn: 6000, priceUsd: 4.15 },
-    { value: 'global', label: 'Global Pass (120+ Countries)', code: 'GL', priceNgn: 11500, priceUsd: 8.00 },
-];
-
-const DATA_PACKAGES = [
-    { value: '1gb', label: '1 GB Data — 7 Days Validity' },
-    { value: '3gb', label: '3 GB Data — 15 Days Validity' },
-    { value: '5gb', label: '5 GB Data — 30 Days Validity' },
-    { value: '10gb', label: '10 GB Data — 30 Days Validity' },
-];
-
-export default function ESimServices() {
+export default function ESimComingSoonPage() {
     const { props } = usePage<any>();
-    const authAccount = props.auth?.account || { available_balance: 0 };
-    const userCurrencyId = Number(props.auth?.user?.user_currency_id || props.auth?.currency?.id || 1);
-    const authCurrency = props.auth?.currency || (userCurrencyId === 1 ? { code: 'USD', symbol: '$', rate: 1.0 } : { code: 'NGN', symbol: '₦', rate: 1300.0 });
-    const isUsd = (authCurrency.code || '').toUpperCase() === 'USD';
-    const currentBalance = Number(authAccount.available_balance) || 0;
-    const currencySymbol = authCurrency.symbol || (userCurrencyId === 1 ? '$' : '₦');
-
+    const authUser = props.auth?.user || {};
     const toast = useToast();
-    const flow = useTransactionFlow();
 
-    const [region, setRegion] = React.useState('usa');
-    const [dataPkg, setDataPkg] = React.useState('3gb');
+    const [email, setEmail] = React.useState(authUser.email || '');
+    const [isSubscribed, setIsSubscribed] = React.useState(false);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-    const selectedRegion = REGIONS.find(r => r.value === region) || REGIONS[0];
-    const selectedPkg = DATA_PACKAGES.find(p => p.value === dataPkg) || DATA_PACKAGES[0];
-    const price = isUsd ? selectedRegion.priceUsd : selectedRegion.priceNgn;
-    const remainingBalance = Math.max(0, currentBalance - price);
-
-    const handleInitiateOrder = (e: React.FormEvent) => {
+    const handleNotifyMe = (e: React.FormEvent) => {
         e.preventDefault();
+        if (!email.trim()) {
+            toast.error('Please enter a valid email address.');
+            return;
+        }
 
-        const txData: UniversalTransactionData = {
-            serviceName: `eSIM Global Profile — ${selectedRegion.label}`,
-            serviceCategory: 'Travel eSIM Profiles',
-            serviceType: 'esim',
-            providerName: `${selectedRegion.label}`,
-            recipient: `${selectedRegion.code} Region (${selectedPkg.label.split('—')[0].trim()})`,
-            recipientLabel: 'Destination & Data',
-            selectedItemName: `${selectedPkg.label}`,
-            selectedItemLabel: 'Data Package',
-            quantity: 1,
-            subtotal: price,
-            totalAmount: price,
-            currencySymbol: currencySymbol,
-            currencyCode: authCurrency.code || (userCurrencyId === 1 ? 'USD' : 'NGN'),
-            currentBalance: currentBalance,
-            remainingBalance: remainingBalance,
-            status: 'awaiting_confirmation',
-            additionalDetails: [
-                { label: 'Region', value: selectedRegion.label },
-                { label: 'Package Plan', value: selectedPkg.label },
-                { label: 'Delivery Speed', value: 'Instant LPA Activation String & QR' },
-            ],
-        };
-
-        flow.initiateFlow(txData);
-        flow.openConfirmModal();
-    };
-
-    const handleExecuteOrder = async () => {
-        flow.startProcessing();
-
-        const refId = 'KORAK-' + Math.floor(100000 + Math.random() * 900000);
-        const iccid = `890141032${Math.floor(100000000 + Math.random() * 900000000)}`;
-        const activationString = `LPA:1$cipher-esim.net$${iccid}`;
-
-        router.post('/user/services/order', {
-            service_code: 'esim_global_profile',
-            quantity: 1,
-            options: {
-                region: selectedRegion.label,
-                package: dataPkg,
-            }
-        }, {
-            preserveScroll: true,
-            onSuccess: () => {
-                flow.completeSuccess({
-                    reference: refId,
-                    status: 'completed',
-                    date: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-                    notes: `ICCID: ${iccid} | ACTIVATION_STRING: ${activationString}`,
-                });
-                toast.success('eSIM Profile provisioned and stored in Order Vault!', 'Provisioning Completed');
-            },
-            onError: (err: any) => {
-                flow.completeFailed(err.message || 'Failed to order eSIM profile. Please check your wallet balance.');
-                toast.error(err.message || 'Failed to order eSIM profile. Please check your wallet balance.');
-            }
-        });
+        setIsSubmitting(true);
+        setTimeout(() => {
+            setIsSubmitting(false);
+            setIsSubscribed(true);
+            toast.success('You have been added to the early-access waitlist for Korak eSIM!');
+        }, 600);
     };
 
     return (
         <>
-            <Head title="Travel eSIM Profiles" />
+            <Head title="Global eSIM Data — Coming Soon" />
 
-            <div className="max-w-7xl mx-auto space-y-6 select-none animate-fadeIn px-4 py-4 md:px-0 md:py-0 pb-16">
-                {/* Standardized Page Header */}
+            <div className="max-w-5xl mx-auto space-y-8 select-none animate-fadeIn px-4 py-4 md:px-0 md:py-2 pb-16">
+
+                {/* ──── 1. Page Header ──── */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
-                        <h1 className="text-xl md:text-2xl font-black text-text-primary tracking-tight">Travel eSIM Store</h1>
-                        <p className="text-xs text-text-secondary">
-                            Get instant QR and LPA activation credentials for high-speed roaming across 150+ countries.
+                        <div className="flex items-center gap-2.5">
+                            <h1 className="text-xl md:text-2xl font-black text-text-primary tracking-tight">
+                                Global eSIM Data
+                            </h1>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-brand bg-brand-subtle border border-brand/20 px-2.5 py-0.5 rounded-full">
+                                Coming Soon
+                            </span>
+                        </div>
+                        <p className="text-xs text-text-secondary mt-1">
+                            Stay connected worldwide without physical SIM cards. In active development.
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                        <Badge variant="success" dot statusIcon="check">Instant Delivery</Badge>
-                        <span className="text-[10px] text-text-muted">Global coverage</span>
+                    <div className="flex items-center gap-1.5 text-xs text-text-muted bg-bg-surface border border-border-subtle px-3 py-1.5 rounded-lg">
+                        <Clock size={14} className="text-brand shrink-0" aria-hidden="true" />
+                        <span className="font-medium text-[11px]">Launching in Upcoming Release</span>
                     </div>
                 </div>
 
-                {/* Standard 12-Column Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                    {/* Form area (8 Cols) */}
-                    <div className="lg:col-span-8 space-y-5">
-                        {/* Region Selector */}
-                        <div className="bg-bg-surface border border-border-subtle p-5 rounded-md shadow-2xs space-y-3">
-                            <span className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                                1. Select Travel Region
-                            </span>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                {REGIONS.map((r) => {
-                                    const isSelected = region === r.value;
-                                    const regPrice = isUsd ? r.priceUsd : r.priceNgn;
-                                    return (
-                                        <button
-                                            key={r.value}
-                                            type="button"
-                                            onClick={() => setRegion(r.value)}
-                                            className={cn(
-                                                "p-4 rounded-md border text-left flex items-center justify-between transition-all cursor-pointer",
-                                                isSelected
-                                                    ? 'border-brand bg-brand-subtle text-brand ring-1 ring-brand shadow-2xs'
-                                                    : 'border-border-subtle bg-bg-surface hover:bg-bg-surface-hover text-text-primary'
-                                            )}
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-full bg-brand-subtle text-brand flex items-center justify-center font-bold text-xs">
-                                                    {r.code}
-                                                </div>
-                                                <div>
-                                                    <div className="text-xs font-bold">{r.label}</div>
-                                                    <div className="text-[10px] text-text-muted">Starting from {currencySymbol}{isUsd ? regPrice.toFixed(2) : regPrice.toLocaleString()}</div>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    );
-                                })}
-                            </div>
+                {/* ──── 2. Hero Visual Card ──── */}
+                <div className="bg-brand text-brand-foreground rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-sm">
+                    {/* Decorative curved watermarks */}
+                    <div className="absolute -right-8 -bottom-10 w-48 h-48 rounded-full border-[18px] border-white/8 pointer-events-none" />
+                    <div className="absolute -right-2 -bottom-2 w-32 h-32 rounded-full border-[12px] border-white/6 pointer-events-none" />
+
+                    <div className="relative z-10 max-w-2xl space-y-3">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/12 border border-white/20 text-white text-[10px] font-bold tracking-wider uppercase">
+                            <Sparkles size={12} aria-hidden="true" />
+                            <span>Next-Gen Travel Connectivity</span>
                         </div>
 
-                        {/* Package Configuration */}
-                        <div className="bg-bg-surface border border-border-subtle p-6 rounded-md shadow-2xs">
-                            <form onSubmit={handleInitiateOrder} className="space-y-4">
-                                <Select
-                                    label="2. Data Allowance & Validity"
-                                    options={DATA_PACKAGES}
-                                    value={dataPkg}
-                                    onChange={(e) => setDataPkg(e.target.value)}
+                        <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white leading-tight">
+                            International Travel Data Without Roaming Fees
+                        </h2>
+
+                        <p className="text-xs sm:text-sm text-white/85 leading-relaxed">
+                            We are finalizing direct global telecom carrier integrations for Korak eSIM. Soon you will be able to activate high-speed 4G/5G mobile data across 190+ countries straight from your phone using an instant QR code.
+                        </p>
+                    </div>
+                </div>
+
+                {/* ──── 3. What to Expect (4 Feature Cards) ──── */}
+                <div className="space-y-3">
+                    <h3 className="text-sm font-bold text-text-primary tracking-tight">
+                        What to Expect with Korak eSIM
+                    </h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                        <div className="bg-bg-surface border border-border-subtle rounded-xl p-4 space-y-2 shadow-2xs">
+                            <div className="w-9 h-9 rounded-lg bg-brand-subtle text-brand flex items-center justify-center shrink-0">
+                                <QrCode size={18} />
+                            </div>
+                            <h4 className="text-xs font-bold text-text-primary">Instant QR Setup</h4>
+                            <p className="text-[11px] text-text-secondary leading-snug">
+                                Scan a secure QR code or copy the LPA string to activate within 60 seconds.
+                            </p>
+                        </div>
+
+                        <div className="bg-bg-surface border border-border-subtle rounded-xl p-4 space-y-2 shadow-2xs">
+                            <div className="w-9 h-9 rounded-lg bg-info-bg text-info flex items-center justify-center shrink-0">
+                                <Globe size={18} />
+                            </div>
+                            <h4 className="text-xs font-bold text-text-primary">190+ Countries</h4>
+                            <p className="text-[11px] text-text-secondary leading-snug">
+                                Destination coverage across North America, Europe, Asia, Africa, and Global passes.
+                            </p>
+                        </div>
+
+                        <div className="bg-bg-surface border border-border-subtle rounded-xl p-4 space-y-2 shadow-2xs">
+                            <div className="w-9 h-9 rounded-lg bg-brand-subtle text-brand flex items-center justify-center shrink-0">
+                                <Phone size={18} />
+                            </div>
+                            <h4 className="text-xs font-bold text-text-primary">Keep Your Number</h4>
+                            <p className="text-[11px] text-text-secondary leading-snug">
+                                Dual-SIM capability lets you keep your primary WhatsApp and bank alerts active.
+                            </p>
+                        </div>
+
+                        <div className="bg-bg-surface border border-border-subtle rounded-xl p-4 space-y-2 shadow-2xs">
+                            <div className="w-9 h-9 rounded-lg bg-success-bg text-success flex items-center justify-center shrink-0">
+                                <ShieldCheck size={18} />
+                            </div>
+                            <h4 className="text-xs font-bold text-text-primary">Zero Roaming Shock</h4>
+                            <p className="text-[11px] text-text-secondary leading-snug">
+                                Prepaid transparent pricing funded directly from your Korak multi-currency wallet.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* ──── 4. Early Access Notification Form ──── */}
+                <div className="bg-bg-surface border border-border-subtle rounded-2xl p-6 sm:p-7 shadow-2xs">
+                    <div className="max-w-xl space-y-4">
+                        <div>
+                            <h3 className="text-sm font-bold text-text-primary">
+                                Get Notified When eSIM Launches
+                            </h3>
+                            <p className="text-xs text-text-secondary mt-0.5">
+                                Join our early-access waitlist to receive priority access and exclusive beta discounts.
+                            </p>
+                        </div>
+
+                        {isSubscribed ? (
+                            <div className="p-3.5 rounded-xl bg-success-bg border border-success-border/60 text-success text-xs font-semibold flex items-center gap-2">
+                                <CheckCircle2 size={16} className="shrink-0" />
+                                <span>You are on the VIP launch list! We will email you the moment eSIM goes live.</span>
+                            </div>
+                        ) : (
+                            <form onSubmit={handleNotifyMe} className="flex flex-col sm:flex-row items-stretch gap-2.5 max-w-md">
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="Enter your email address"
+                                    className="flex-1 bg-bg-base border border-border-subtle focus:border-brand rounded-lg px-3.5 py-2.5 text-xs text-text-primary placeholder:text-text-muted focus:outline-none transition-colors"
+                                    required
                                 />
-
-                                <div className="p-4 rounded-md bg-bg-base border border-border-subtle flex items-center justify-between">
-                                    <span className="text-xs text-text-secondary">Estimated Checkout:</span>
-                                    <span className="text-base font-black font-mono text-brand">
-                                        {currencySymbol}{isUsd ? price.toFixed(2) : price.toLocaleString()}
-                                    </span>
-                                </div>
-
-                                <Button
+                                <button
                                     type="submit"
-                                    variant="primary"
-                                    className="w-full text-xs font-bold shadow-sm py-2.5 mt-2"
-                                    disabled={flow.isProcessing}
+                                    disabled={isSubmitting}
+                                    className="inline-flex items-center justify-center gap-1.5 bg-brand text-brand-foreground hover:bg-brand-hover active:scale-[0.96] text-xs font-bold px-4 py-2.5 rounded-lg shadow-xs transition-transform cursor-pointer disabled:opacity-60 shrink-0"
                                 >
-                                    Proceed to Activation ({currencySymbol}{isUsd ? price.toFixed(2) : price.toLocaleString()})
-                                </Button>
+                                    <Send size={13} aria-hidden="true" />
+                                    <span>{isSubmitting ? 'Adding...' : 'Notify Me'}</span>
+                                </button>
                             </form>
-                        </div>
-                    </div>
-
-                    {/* Right Features Column (4 Cols) */}
-                    <div className="lg:col-span-4 space-y-4">
-                        <div className="bg-bg-surface border border-border-subtle p-5 rounded-md shadow-2xs space-y-4">
-                            <div className="flex items-center gap-2.5 border-b border-border-subtle pb-3">
-                                <GlobeIcon size={20} className="text-brand" />
-                                <span className="text-xs font-bold text-text-primary uppercase tracking-wider">
-                                    Why Korak eSIM?
-                                </span>
-                            </div>
-
-                            <ul className="space-y-3 text-xs">
-                                <li className="flex items-start gap-2 text-text-secondary">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-brand shrink-0 mt-1.5" />
-                                    <span><strong>Instant QR Delivery:</strong> Scan and connect in 60 seconds without physical SIMs.</span>
-                                </li>
-                                <li className="flex items-start gap-2 text-text-secondary">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-brand shrink-0 mt-1.5" />
-                                    <span><strong>Multi-Carrier Access:</strong> Connects to the strongest local network in every country automatically.</span>
-                                </li>
-                                <li className="flex items-start gap-2 text-text-secondary">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-brand shrink-0 mt-1.5" />
-                                    <span><strong>Hotspot Allowed:</strong> Tether to your laptop or other mobile devices with zero restrictions.</span>
-                                </li>
-                            </ul>
-                        </div>
+                        )}
                     </div>
                 </div>
-            </div>
 
-            {/* Universal Transaction Modal */}
-            <TransactionFlowModal
-                step={flow.step}
-                data={flow.data}
-                isProcessing={flow.isProcessing}
-                isCheckingStatus={flow.isCheckingStatus}
-                onClose={flow.resetFlow}
-                onConfirmPay={handleExecuteOrder}
-                handlers={{
-                    onBuyAgain: () => {
-                        flow.resetFlow();
-                    },
-                    onTryAgain: () => {
-                        flow.openConfirmModal();
-                    },
-                }}
-            />
+                {/* ──── 5. Working Active Services (Airtime & Data) ──── */}
+                <div className="bg-bg-surface border border-border-subtle rounded-2xl p-6 sm:p-7 shadow-2xs space-y-4">
+                    <div>
+                        <h3 className="text-sm font-bold text-text-primary">
+                            Need mobile connectivity right now?
+                        </h3>
+                        <p className="text-xs text-text-secondary mt-0.5">
+                            Our instant local airtime and high-speed data services are fully active and operational.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <Link
+                            href="/user/services/data"
+                            className="group p-4 rounded-xl border border-border-subtle hover:border-brand/40 bg-bg-base hover:bg-bg-surface-hover/80 transition-all flex items-center justify-between"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-info-bg text-info flex items-center justify-center shrink-0">
+                                    <Wifi size={18} />
+                                </div>
+                                <div>
+                                    <h4 className="text-xs font-bold text-text-primary group-hover:text-brand transition-colors">
+                                        Mobile Data Top-up
+                                    </h4>
+                                    <p className="text-[11px] text-text-muted mt-0.5">
+                                        Instant SME, Gifting &amp; Corporate data for all networks
+                                    </p>
+                                </div>
+                            </div>
+                            <ArrowRight size={15} className="text-text-muted group-hover:text-brand group-hover:translate-x-1 transition-transform" />
+                        </Link>
+
+                        <Link
+                            href="/user/services/airtime"
+                            className="group p-4 rounded-xl border border-border-subtle hover:border-brand/40 bg-bg-base hover:bg-bg-surface-hover/80 transition-all flex items-center justify-between"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-brand-subtle text-brand flex items-center justify-center shrink-0">
+                                    <Phone size={18} />
+                                </div>
+                                <div>
+                                    <h4 className="text-xs font-bold text-text-primary group-hover:text-brand transition-colors">
+                                        Airtime Recharge
+                                    </h4>
+                                    <p className="text-[11px] text-text-muted mt-0.5">
+                                        Instant airtime recharge with cashback bonus
+                                    </p>
+                                </div>
+                            </div>
+                            <ArrowRight size={15} className="text-text-muted group-hover:text-brand group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
+                </div>
+
+            </div>
         </>
     );
 }
-
-ESimServices.layout = (page: React.ReactNode) => (
-    <AppShell title="Travel eSIM" backUrl="/user/services">
-        {page}
-    </AppShell>
-);

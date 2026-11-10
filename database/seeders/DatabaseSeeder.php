@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
                 [
                     'category' => $s['category'],
                     'name' => $s['name'],
-                    'is_active' => true,
+                    'is_active' => in_array($s['category'], ['airtime', 'data']),
                 ]
             );
 

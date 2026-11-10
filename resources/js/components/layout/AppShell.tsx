@@ -38,6 +38,7 @@ interface NavItem {
     name: string;
     href: string;
     icon: React.ComponentType<{ className?: string; size?: number }>;
+    badge?: string;
 }
 
 const OVERVIEW_NAV: NavItem[] = [
@@ -46,14 +47,14 @@ const OVERVIEW_NAV: NavItem[] = [
 ];
 
 const SERVICES_NAV: NavItem[] = [
-    { name: 'Numbers (OTP)', href: '/user/numbers', icon: Smartphone },
-    { name: 'Rent Numbers', href: '/user/numbers/rent', icon: Clock },
-    { name: 'Mobile Data', href: '/user/services/data', icon: Wifi },
-    { name: 'Airtime', href: '/user/services/airtime', icon: Phone },
-    { name: 'Social Growth', href: '/user/services/growth', icon: TrendingUp },
-    { name: 'Social Accounts', href: '/user/services/accounts', icon: ShoppingBag },
-    { name: 'VPN', href: '/user/services/vpn', icon: ShieldCheck },
-    { name: 'eSIM', href: '/user/services/esim', icon: Globe },
+    { name: 'Mobile Data', href: '/user/services/data', icon: Wifi, badge: 'Active' },
+    { name: 'Airtime', href: '/user/services/airtime', icon: Phone, badge: 'Active' },
+    { name: 'Global eSIM', href: '/user/services/esim', icon: Globe, badge: 'Soon' },
+    { name: 'Numbers (OTP)', href: '/user/numbers', icon: Smartphone, badge: 'Paused' },
+    { name: 'Rent Numbers', href: '/user/numbers/rent', icon: Clock, badge: 'Paused' },
+    { name: 'Social Growth', href: '/user/services/growth', icon: TrendingUp, badge: 'Paused' },
+    { name: 'Social Accounts', href: '/user/services/accounts', icon: ShoppingBag, badge: 'Paused' },
+    { name: 'VPN', href: '/user/services/vpn', icon: ShieldCheck, badge: 'Paused' },
 ];
 
 const ACCOUNT_NAV: NavItem[] = [
@@ -161,13 +162,13 @@ const AppLayoutInner: React.FC<{ children: React.ReactNode; title?: string; back
     const isDashboard = url === '/user/dashboard' || url === '/';
 
     const allServices = [
-        { name: 'Airtime', desc: 'Buy airtime for all networks', href: '/user/services/airtime', icon: Phone },
         { name: 'Mobile Data', desc: 'Affordable SME & Direct data', href: '/user/services/data', icon: Wifi },
-        { name: 'Social Growth', desc: 'Followers, likes, boosting', href: '/user/services/growth', icon: TrendingUp },
-        { name: 'Social Accounts', desc: 'Verified social accounts', href: '/user/services/accounts', icon: ShoppingBag },
-        { name: 'Virtual Numbers', desc: 'SMS verification numbers', href: '/user/numbers', icon: Smartphone },
-        { name: 'Secure VPN', desc: 'Fast, secure private browsing', href: '/user/services/vpn', icon: ShieldCheck },
-        { name: 'Global eSIM', desc: 'International data roaming', href: '/user/services/esim', icon: Globe },
+        { name: 'Airtime', desc: 'Buy airtime for all networks', href: '/user/services/airtime', icon: Phone },
+        { name: 'Global eSIM', desc: 'International data roaming (Coming Soon)', href: '/user/services/esim', icon: Globe },
+        { name: 'Virtual Numbers', desc: 'SMS verification numbers (Paused)', href: '/user/numbers', icon: Smartphone },
+        { name: 'Social Growth', desc: 'Followers, likes, boosting (Paused)', href: '/user/services/growth', icon: TrendingUp },
+        { name: 'Social Accounts', desc: 'Verified social accounts (Paused)', href: '/user/services/accounts', icon: ShoppingBag },
+        { name: 'Secure VPN', desc: 'Fast, secure private browsing (Paused)', href: '/user/services/vpn', icon: ShieldCheck },
     ];
 
     const filteredServices = searchQuery.trim()
@@ -217,14 +218,28 @@ const AppLayoutInner: React.FC<{ children: React.ReactNode; title?: string; back
                                     <Link
                                         href={item.href}
                                         className={cn(
-                                            "flex items-center gap-3 px-3 py-2 text-xs font-semibold rounded-md transition-colors",
+                                            "flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-md transition-colors",
                                             isActive(item.href)
                                                 ? "bg-brand-subtle text-brand"
                                                 : "text-text-secondary hover:bg-bg-surface-hover hover:text-text-primary"
                                         )}
                                     >
-                                        <item.icon className="shrink-0" size={17} />
-                                        <span>{item.name}</span>
+                                        <div className="flex items-center gap-3 min-w-0">
+                                            <item.icon className="shrink-0" size={17} />
+                                            <span className="truncate">{item.name}</span>
+                                        </div>
+                                        {item.badge && (
+                                            <span className={cn(
+                                                "text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider shrink-0",
+                                                item.badge === 'Active'
+                                                    ? "bg-success-bg text-success"
+                                                    : item.badge === 'Soon'
+                                                    ? "bg-brand-subtle text-brand border border-brand/20"
+                                                    : "bg-bg-base text-text-muted border border-border-subtle"
+                                            )}>
+                                                {item.badge}
+                                            </span>
+                                        )}
                                     </Link>
                                 </li>
                             ))}

@@ -137,29 +137,10 @@ class NumbersController extends Controller
         ]);
 
         $user = $request->user();
-        $serviceCode = 'num_' . strtolower($request->input('service_code'));
 
-        try {
-            $order = $this->supplierService->placeOrder(
-                $user,
-                $serviceCode,
-                1,
-                [
-                    'category' => 'numbers',
-                    'service_code' => strtolower($request->input('service_code')),
-                    'service_name' => $request->input('service_name'),
-                    'country_id' => (int) $request->input('country_id'),
-                    'country_name' => $request->input('country_name'),
-                    'cost_usd' => (float) ($request->input('cost_usd') ?? 1.50),
-                ]
-            );
-
-            return redirect()->back()->with('success', "Virtual number reserved successfully for {$request->input('service_name')}!");
-        } catch (\Throwable $e) {
-            return redirect()->back()->withErrors([
-                'purchase' => $e->getMessage(),
-            ]);
-        }
+        return redirect()->back()->withErrors([
+            'purchase' => 'Virtual Numbers service is currently deactivated.',
+        ]);
     }
 
     /**

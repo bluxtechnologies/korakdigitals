@@ -470,11 +470,16 @@ export default function Numbers() {
                 {/* Page Title & Tabs */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <h1 className="text-xl md:text-2xl font-black text-text-primary tracking-tight">
-                            Virtual Phone Numbers
-                        </h1>
+                        <div className="flex items-center gap-2.5">
+                            <h1 className="text-xl md:text-2xl font-black text-text-primary tracking-tight">
+                                Virtual Phone Numbers
+                            </h1>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted bg-bg-surface border border-border-subtle px-2.5 py-0.5 rounded-full">
+                                Paused
+                            </span>
+                        </div>
                         <p className="text-xs text-text-secondary mt-0.5">
-                            Real temporary phone numbers for instant SMS verification codes across 100+ global platforms.
+                            Temporary phone numbers for instant SMS verification codes across global platforms.
                         </p>
                     </div>
 
@@ -488,7 +493,22 @@ export default function Numbers() {
                             className="px-3 py-1.5 rounded-sm text-xs font-semibold text-text-secondary hover:text-text-primary transition-colors flex items-center gap-1.5"
                         >
                             <span>Rent Numbers (Multi-day)</span>
-                            <Badge variant="primary" size="xs">Phase 2</Badge>
+                            <Badge variant="primary" size="xs">Paused</Badge>
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Deactivated Service Notice */}
+                <div className="p-4 rounded-xl border border-border-subtle bg-bg-surface flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2.5 text-text-secondary font-medium">
+                        <span className="text-sm">⚠️</span>
+                        <span>
+                            <strong className="text-text-primary">Service Deactivated:</strong> Virtual Numbers service is currently paused for upgrades. Our active services are <strong className="text-text-primary">Mobile Data</strong> and <strong className="text-text-primary">Airtime</strong>.
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                        <Link href="/user/services/data" className="text-xs font-bold text-brand hover:underline">
+                            Go to Mobile Data →
                         </Link>
                     </div>
                 </div>
@@ -629,11 +649,11 @@ export default function Numbers() {
                                     </div>
 
                                     <Button
-                                        className="w-full mt-1"
-                                        disabled={flow.isProcessing}
-                                        onClick={handleInitiatePurchase}
+                                        className="w-full mt-1 opacity-60 cursor-not-allowed"
+                                        disabled={true}
+                                        variant="outline"
                                     >
-                                        Order Number Now
+                                        Service Currently Deactivated
                                     </Button>
 
                                     <span className="text-[10px] text-text-muted text-center leading-relaxed select-none">

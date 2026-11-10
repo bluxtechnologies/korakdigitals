@@ -38,6 +38,18 @@ class ServiceDeskController extends Controller
 
         $user = $request->user();
 
+        // Enforce active status: only active services (airtime & data) can be ordered
+        $service = Service::where('code', $validated['service_code'])->first();
+        if ($service && !$service->is_active) {
+            $msg = $service->category === 'esim'
+                ? 'Global eSIM profiles are currently in development and coming soon.'
+                : 'This service is currently deactivated.';
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => $msg], 400);
+            }
+            return back()->withErrors(['message' => $msg]);
+        }
+
         try {
             $order = $this->supplierService->placeOrder(
                 $user,

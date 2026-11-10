@@ -86,8 +86,23 @@ export default function NumbersRent() {
                         </Link>
                         <div className="px-3 py-1.5 rounded-sm text-xs font-bold bg-brand text-text-inverse shadow-2xs flex items-center gap-1.5">
                             <span>Rent Numbers (Multi-day)</span>
-                            <Badge variant="primary" size="xs">Phase 2</Badge>
+                            <Badge variant="primary" size="xs">Paused</Badge>
                         </div>
+                    </div>
+                </div>
+
+                {/* Deactivated Service Notice */}
+                <div className="p-4 rounded-xl border border-border-subtle bg-bg-surface flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2.5 text-text-secondary font-medium">
+                        <span className="text-sm">⚠️</span>
+                        <span>
+                            <strong className="text-text-primary">Service Deactivated:</strong> Rent Numbers service is currently paused for upgrades. Our active working services are <strong className="text-text-primary">Mobile Data</strong> and <strong className="text-text-primary">Airtime</strong>.
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                        <Link href="/user/services/data" className="text-xs font-bold text-brand hover:underline">
+                            Go to Mobile Data →
+                        </Link>
                     </div>
                 </div>
 

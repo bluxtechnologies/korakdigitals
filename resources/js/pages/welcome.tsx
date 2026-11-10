@@ -628,42 +628,26 @@ function LandingPageContent({ services = [], settings, metrics, announcement }: 
                                         <ChevronRight size={14} className="text-text-muted group-hover:translate-x-0.5 group-hover:text-text-primary transition-all shrink-0" />
                                     </Link>
 
-                                    {/* Social Media */}
+                                    {/* Global eSIM (Coming Soon) */}
                                     <Link
-                                        href={authUser ? '/user/services/growth' : '/login'}
+                                        href={authUser ? '/user/services/esim' : '/login'}
                                         className="flex items-center justify-between p-2 rounded-xl hover:bg-bg-surface-hover transition-colors group"
                                     >
                                         <div className="flex items-center gap-2.5">
                                             <div className="w-8 h-8 rounded-lg bg-brand-subtle text-brand flex items-center justify-center shrink-0">
-                                                <TrendingUp size={15} strokeWidth={2.2} />
+                                                <Globe size={15} strokeWidth={2.2} />
                                             </div>
                                             <div className="flex flex-col text-left">
-                                                <span className="text-xs font-bold text-text-primary leading-tight group-hover:text-brand transition-colors">
-                                                    Social Media
-                                                </span>
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className="text-xs font-bold text-text-primary leading-tight group-hover:text-brand transition-colors">
+                                                        Global eSIM
+                                                    </span>
+                                                    <span className="text-[9px] font-bold text-brand bg-brand-subtle px-1.5 py-0.2 rounded-full border border-brand/20">
+                                                        Soon
+                                                    </span>
+                                                </div>
                                                 <span className="text-[10px] text-text-muted leading-tight">
-                                                    Grow your presence
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <ChevronRight size={14} className="text-text-muted group-hover:translate-x-0.5 group-hover:text-text-primary transition-all shrink-0" />
-                                    </Link>
-
-                                    {/* Verification */}
-                                    <Link
-                                        href={authUser ? '/user/numbers' : '/login'}
-                                        className="flex items-center justify-between p-2 rounded-xl hover:bg-bg-surface-hover transition-colors group"
-                                    >
-                                        <div className="flex items-center gap-2.5">
-                                            <div className="w-8 h-8 rounded-lg bg-brand-subtle text-brand flex items-center justify-center shrink-0">
-                                                <ShieldCheck size={15} strokeWidth={2.2} />
-                                            </div>
-                                            <div className="flex flex-col text-left">
-                                                <span className="text-xs font-bold text-text-primary leading-tight group-hover:text-brand transition-colors">
-                                                    Verification
-                                                </span>
-                                                <span className="text-[10px] text-text-muted leading-tight">
-                                                    Get verified
+                                                    International roaming
                                                 </span>
                                             </div>
                                         </div>
@@ -788,12 +772,10 @@ function LandingPageContent({ services = [], settings, metrics, announcement }: 
                             Services
                         </h4>
                         <ul className="space-y-2 text-text-muted font-medium">
-                            <li><Link href={authUser ? '/user/numbers' : '/register'} className="hover:text-brand transition-colors">Virtual Numbers</Link></li>
                             <li><Link href={authUser ? '/user/services/data' : '/register'} className="hover:text-brand transition-colors">Mobile Data</Link></li>
                             <li><Link href={authUser ? '/user/services/airtime' : '/register'} className="hover:text-brand transition-colors">Airtime Top-ups</Link></li>
-                            <li><Link href={authUser ? '/user/services/growth' : '/register'} className="hover:text-brand transition-colors">Social Growth</Link></li>
-                            <li><Link href={authUser ? '/user/services/accounts' : '/register'} className="hover:text-brand transition-colors">Verified Accounts</Link></li>
-                            <li><Link href={authUser ? '/user/services/vpn' : '/register'} className="hover:text-brand transition-colors">Secure VPN</Link></li>
+                            <li><Link href={authUser ? '/user/services/esim' : '/register'} className="hover:text-brand transition-colors flex items-center gap-1.5"><span>Global eSIM</span><span className="text-[9px] font-bold bg-brand-subtle text-brand px-1.5 py-0.2 rounded-full border border-brand/20">Soon</span></Link></li>
+                            <li><Link href={authUser ? '/user/services' : '/register'} className="hover:text-brand transition-colors">All Services Catalog</Link></li>
                         </ul>
                     </div>
 

@@ -24,7 +24,7 @@ interface ServiceItem {
     href: string;
     icon: React.ComponentType<{ className?: string; size?: number }>;
     category: 'mobile' | 'social' | 'more';
-    isComingSoon?: boolean;
+    status: 'active' | 'coming_soon' | 'inactive';
     keywords: string[];
 }
 
@@ -36,7 +36,7 @@ interface ServiceSection {
 }
 
 const ALL_SERVICES: ServiceItem[] = [
-    // Mobile & Internet
+    // Mobile & Internet (Working Services)
     {
         id: 'airtime',
         name: 'Airtime',
@@ -45,6 +45,7 @@ const ALL_SERVICES: ServiceItem[] = [
         href: '/user/services/airtime',
         icon: Smartphone,
         category: 'mobile',
+        status: 'active',
         keywords: ['airtime', 'recharge', 'vtu', 'mtn', 'airtel', 'glo', '9mobile', 'phone', 'call', 'credit']
     },
     {
@@ -55,30 +56,35 @@ const ALL_SERVICES: ServiceItem[] = [
         href: '/user/services/data',
         icon: Globe,
         category: 'mobile',
+        status: 'active',
         keywords: ['data', 'internet', 'browsing', 'sme', 'mtn', 'airtel', 'glo', '9mobile', 'bundle', 'gigabytes', 'gb']
     },
 
-    // Social & Digital
+    // More Services (eSIM Coming Soon)
     {
-        id: 'growth',
-        name: 'Social Growth',
-        descDesktop: 'Boost your social media presence.',
-        descMobile: 'Boost your presence.',
-        href: '/user/services/growth',
-        icon: TrendingUp,
-        category: 'social',
-        keywords: ['social growth', 'followers', 'likes', 'views', 'instagram', 'tiktok', 'twitter', 'telegram', 'youtube', 'boost', 'smm']
+        id: 'esim',
+        name: 'eSIM',
+        descDesktop: 'Get mobile data without a physical SIM card.',
+        descMobile: 'Get mobile data without a physical SIM.',
+        href: '/user/services/esim',
+        icon: Cpu,
+        category: 'more',
+        status: 'coming_soon',
+        keywords: ['esim', 'digital sim', 'travel data', 'international roaming', 'qr sim']
     },
     {
-        id: 'accounts',
-        name: 'Social Accounts',
-        descDesktop: 'Get verified and active social media accounts.',
-        descMobile: 'Get verified accounts.',
-        href: '/user/services/accounts',
-        icon: Users,
-        category: 'social',
-        keywords: ['social accounts', 'aged', 'pva', 'instagram accounts', 'tiktok accounts', 'twitter accounts', 'telegram accounts', 'bm250', 'facebook']
+        id: 'vpn',
+        name: 'VPN',
+        descDesktop: 'Secure your connection and browse freely.',
+        descMobile: 'Secure your connection.',
+        href: '/user/services/vpn',
+        icon: Lock,
+        category: 'more',
+        status: 'inactive',
+        keywords: ['vpn', 'virtual private network', 'wireguard', 'privacy', 'security', 'ip address', 'unblock']
     },
+
+    // Social & Digital (Deactivated Services)
     {
         id: 'numbers',
         name: 'Rent Numbers',
@@ -87,6 +93,7 @@ const ALL_SERVICES: ServiceItem[] = [
         href: '/user/numbers/rent',
         icon: Smartphone,
         category: 'social',
+        status: 'inactive',
         keywords: ['virtual numbers', 'sms', 'verification', 'rent number', 'temp number', 'usa number', 'uk number', 'receive sms']
     },
     {
@@ -97,31 +104,30 @@ const ALL_SERVICES: ServiceItem[] = [
         href: '/user/numbers',
         icon: ShieldCheck,
         category: 'social',
+        status: 'inactive',
         keywords: ['verification', 'otp', 'code', 'whatsapp code', 'telegram code', 'google verification', 'activation']
     },
-
-    // More Services
     {
-        id: 'vpn',
-        name: 'VPN',
-        descDesktop: 'Secure your connection and browse freely.',
-        descMobile: 'Secure your connection.',
-        href: '/user/services/vpn',
-        icon: Lock,
-        category: 'more',
-        isComingSoon: true,
-        keywords: ['vpn', 'virtual private network', 'wireguard', 'privacy', 'security', 'ip address', 'unblock']
+        id: 'growth',
+        name: 'Social Growth',
+        descDesktop: 'Boost your social media presence.',
+        descMobile: 'Boost your presence.',
+        href: '/user/services/growth',
+        icon: TrendingUp,
+        category: 'social',
+        status: 'inactive',
+        keywords: ['social growth', 'followers', 'likes', 'views', 'instagram', 'tiktok', 'twitter', 'telegram', 'youtube', 'boost', 'smm']
     },
     {
-        id: 'esim',
-        name: 'eSIM',
-        descDesktop: 'Get mobile data without a physical SIM card.',
-        descMobile: 'Get mobile data without a physical SIM.',
-        href: '/user/services/esim',
-        icon: Cpu,
-        category: 'more',
-        isComingSoon: true,
-        keywords: ['esim', 'digital sim', 'travel data', 'international roaming', 'qr sim']
+        id: 'accounts',
+        name: 'Social Accounts',
+        descDesktop: 'Get verified and active social media accounts.',
+        descMobile: 'Get verified accounts.',
+        href: '/user/services/accounts',
+        icon: Users,
+        category: 'social',
+        status: 'inactive',
+        keywords: ['social accounts', 'aged', 'pva', 'instagram accounts', 'tiktok accounts', 'twitter accounts', 'telegram accounts', 'bm250', 'facebook']
     }
 ];
 
@@ -294,15 +300,25 @@ export default function ServicesIndex() {
                                             href={service.href}
                                             className={cn(
                                                 "relative bg-bg-surface border border-border-subtle rounded-xl p-3.5 sm:p-5 flex flex-col justify-between group transition-all",
-                                                service.isComingSoon
-                                                    ? "opacity-95 hover:border-border-strong cursor-pointer"
-                                                    : "hover:border-brand/40 hover:shadow-xs hover:-translate-y-0.5 cursor-pointer"
+                                                service.status === 'active'
+                                                    ? "hover:border-brand/40 hover:shadow-xs hover:-translate-y-0.5 cursor-pointer"
+                                                    : "opacity-90 hover:border-border-strong cursor-pointer"
                                             )}
                                         >
-                                            {/* Coming Soon Badge */}
-                                            {service.isComingSoon && (
-                                                <span className="absolute top-3 right-3 sm:top-4 sm:right-4 text-[9px] sm:text-[10px] font-bold text-text-muted bg-bg-surface-hover border border-border-subtle px-2 py-0.5 rounded-full">
+                                            {/* Status Badge */}
+                                            {service.status === 'coming_soon' && (
+                                                <span className="absolute top-3 right-3 sm:top-4 sm:right-4 text-[9px] sm:text-[10px] font-bold text-brand bg-brand-subtle border border-brand/20 px-2 py-0.5 rounded-full">
                                                     Coming Soon
+                                                </span>
+                                            )}
+                                            {service.status === 'inactive' && (
+                                                <span className="absolute top-3 right-3 sm:top-4 sm:right-4 text-[9px] sm:text-[10px] font-semibold text-text-muted bg-bg-surface-hover border border-border-subtle px-2 py-0.5 rounded-full">
+                                                    Paused
+                                                </span>
+                                            )}
+                                            {service.status === 'active' && (
+                                                <span className="absolute top-3 right-3 sm:top-4 sm:right-4 text-[9px] sm:text-[10px] font-bold text-success bg-success-bg border border-success-border/40 px-2 py-0.5 rounded-full">
+                                                    Active
                                                 </span>
                                             )}
 
@@ -310,9 +326,9 @@ export default function ServicesIndex() {
                                                 {/* Icon container */}
                                                 <div className={cn(
                                                     "w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 mb-2.5 sm:mb-3.5 transition-colors",
-                                                    service.isComingSoon
-                                                        ? "bg-bg-surface-hover text-text-muted border border-border-subtle"
-                                                        : "bg-brand-subtle text-brand group-hover:bg-brand group-hover:text-brand-foreground"
+                                                    service.status === 'active'
+                                                        ? "bg-brand-subtle text-brand group-hover:bg-brand group-hover:text-brand-foreground"
+                                                        : "bg-bg-surface-hover text-text-muted border border-border-subtle"
                                                 )}>
                                                     <service.icon size={18} className="stroke-[2.2px]" />
                                                 </div>
@@ -333,7 +349,7 @@ export default function ServicesIndex() {
                                             <div className="flex justify-end items-center mt-3 sm:mt-4 pt-1">
                                                 <div className={cn(
                                                     "transition-transform group-hover:translate-x-1",
-                                                    service.isComingSoon ? "text-text-muted" : "text-brand"
+                                                    service.status === 'active' ? "text-brand" : "text-text-muted"
                                                 )}>
                                                     <ArrowRight size={14} className="stroke-[2.5px]" />
                                                 </div>
