@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { CookieConsent } from '../ui/CookieConsent';
 import { UtmTracker } from '../ui/UtmTracker';
+import { BrandLogo } from '@/components/common/BrandLogo';
 import { cn } from '@/lib/utils';
 
 interface NavItem {
@@ -179,9 +180,7 @@ const AppLayoutInner: React.FC<{ children: React.ReactNode; title?: string; back
             <aside className="hidden md:flex flex-col w-64 bg-bg-surface border-r border-border-subtle shrink-0 sticky top-0 h-screen select-none z-30">
                 {/* Brand Logo matching new Burgundy Design */}
                 <div className="px-6 py-5 border-b border-border-subtle flex items-center">
-                    <Link href="/user/dashboard" className="flex items-center gap-2">
-                        <img src="/logos/logo-new.png" alt="Korak Digitals" className="h-8.5 w-auto object-contain" />
-                    </Link>
+                    <BrandLogo href="/user/dashboard" size="md" showSubtitle subtitleText="Digital Solutions" />
                 </div>
 
                 {/* Sidebar Navigation */}
@@ -346,9 +345,7 @@ const AppLayoutInner: React.FC<{ children: React.ReactNode; title?: string; back
             <header className="md:hidden flex items-center px-4 h-14 sm:h-16 bg-bg-surface border-b border-border-subtle sticky top-0 z-40 select-none">
                 {isDashboard ? (
                     <div className="w-full flex items-center justify-between">
-                        <Link href="/user/dashboard" className="flex items-center gap-2">
-                            <img src="/logos/logo-new.png" alt="Korak" className="h-7 w-auto object-contain" />
-                        </Link>
+                        <BrandLogo href="/user/dashboard" size="sm" />
                         <div className="flex items-center gap-2.5">
                             {/* Notification Bell */}
                             <Link

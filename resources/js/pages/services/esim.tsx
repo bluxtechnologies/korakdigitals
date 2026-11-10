@@ -81,7 +81,7 @@ export default function ESimServices() {
     const handleExecuteOrder = async () => {
         flow.startProcessing();
 
-        const refId = 'CLQ-' + Math.floor(100000 + Math.random() * 900000);
+        const refId = 'KORAK-' + Math.floor(100000 + Math.random() * 900000);
         const iccid = `890141032${Math.floor(100000000 + Math.random() * 900000000)}`;
         const activationString = `LPA:1$cipher-esim.net$${iccid}`;
 

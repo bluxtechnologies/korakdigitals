@@ -85,7 +85,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                 <div className="flex items-center justify-between text-text-secondary">
                     <span>Recipient</span>
                     <span className="font-bold font-mono text-text-primary">
-                        {recipientPhone || '08012345678'}
+                        {recipientPhone || '—'}
                     </span>
                 </div>
 

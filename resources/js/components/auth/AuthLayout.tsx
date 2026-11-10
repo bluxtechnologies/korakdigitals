@@ -3,6 +3,7 @@ import { Head, Link } from '@inertiajs/react';
 import { ThemeProvider, useTheme } from '@/components/ThemeContext';
 import { ToastProvider } from '@/components/ui/Toast';
 import { Check, Sun, Moon } from 'lucide-react';
+import { BrandLogo } from '@/components/common/BrandLogo';
 
 export interface AuthLayoutProps {
     title: string;
@@ -22,13 +23,7 @@ export default function AuthLayout({ title, children }: AuthLayoutProps) {
 
                         {/* Top: Horizontal Desktop Logo */}
                         <div className="relative z-10">
-                            <Link href="/" className="inline-flex items-center">
-                                <img
-                                    src="/logos/logo-new.png"
-                                    alt="Korak Digitals"
-                                    className="h-8 xl:h-9 w-auto object-contain dark:brightness-0 dark:invert transition-all duration-200"
-                                />
-                            </Link>
+                            <BrandLogo href="/" size="md" showSubtitle subtitleText="Digital Solutions" />
                         </div>
 
                         {/* Middle Content: Heading, Subtitle & 3 Highlights */}
@@ -94,13 +89,7 @@ export default function AuthLayout({ title, children }: AuthLayoutProps) {
                         {/* Top Header Row: Mobile Logo (left) + Theme Switcher (right) */}
                         <header className="w-full flex items-center justify-between lg:justify-end px-5 sm:px-8 xl:px-12 py-5 sm:py-6 z-20">
                             {/* Mobile Logo: visible only on small screens */}
-                            <Link href="/" className="flex lg:hidden items-center">
-                                <img
-                                    src="/logos/logo-new.png"
-                                    alt="Korak Digitals"
-                                    className="h-7 sm:h-8 w-auto object-contain dark:brightness-0 dark:invert transition-all duration-200"
-                                />
-                            </Link>
+                            <BrandLogo href="/" size="sm" />
 
                             {/* Theme Toggle Button */}
                             <ThemeToggleButton />

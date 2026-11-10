@@ -2,6 +2,7 @@ import * as React from 'react';
 import { CreditCard, Copy, Check, Info } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
 import { FundingAccountData, WalletAccount } from './types';
+import { cn } from '@/lib/utils';
 
 interface WalletAccountDetailsProps {
     account?: WalletAccount | null;
@@ -18,11 +19,16 @@ export const WalletAccountDetails: React.FC<WalletAccountDetailsProps> = ({
     const [copied, setCopied] = React.useState(false);
 
     // Prioritize funding account (virtual account), fallback to public reference / wallet defaults
-    const accountName = fundingAccount?.account_name || 'Korak Wallet' + (userName ? ` (${userName})` : '');
-    const rawAccountNumber = fundingAccount?.account_number || account?.public_reference || 'CLQ-7834-9921-4456';
+    const accountName = fundingAccount?.account_name || (userName ? `${userName} (Korak Wallet)` : 'Korak Wallet');
+    const hasAccountNum = Boolean(fundingAccount?.account_number || account?.public_reference);
+    const rawAccountNumber = fundingAccount?.account_number || account?.public_reference || 'Awaiting Allocation';
     const bankName = fundingAccount?.bank_name || 'Korak Digitals';
 
     const handleCopy = () => {
+        if (!hasAccountNum) {
+            toast.error('Virtual account is currently being provisioned. Please check back shortly.');
+            return;
+        }
         navigator.clipboard.writeText(rawAccountNumber);
         setCopied(true);
         toast.success(`Account number ${rawAccountNumber} copied to clipboard!`);
@@ -65,8 +71,12 @@ export const WalletAccountDetails: React.FC<WalletAccountDetailsProps> = ({
                         <button
                             type="button"
                             onClick={handleCopy}
-                            className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold text-brand hover:bg-brand/10 transition-colors cursor-pointer"
-                            title="Copy account number"
+                            disabled={!hasAccountNum}
+                            className={cn(
+                                "inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold text-brand hover:bg-brand/10 transition-colors cursor-pointer",
+                                !hasAccountNum && "opacity-40 cursor-not-allowed hover:bg-transparent"
+                            )}
+                            title={hasAccountNum ? "Copy account number" : "Account awaiting allocation"}
                         >
                             {copied ? (
                                 <>

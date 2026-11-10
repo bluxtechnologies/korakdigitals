@@ -19,7 +19,8 @@ import {
     Copy,
     CheckCircle2,
     Smartphone,
-    Loader2
+    Loader2,
+    Receipt
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -138,78 +139,20 @@ export default function Dashboard() {
         return selectedCurrency.symbol;
     };
 
-    // Realistic fallback transactions if account has none
-    const sampleTransactions = [
-        {
-            id: 'txn_001',
-            type: 'debit',
-            category: 'airtime',
-            description: 'MTN Airtime — 0803 123 4567',
-            amount: 1000,
-            status: 'completed',
-            date: 'Today, 10:42 AM',
-            currency_code: initialUserCurrency.code,
-            reference: 'KORAK-VTU-9482103'
-        },
-        {
-            id: 'txn_002',
-            type: 'debit',
-            category: 'data',
-            description: 'Airtel Data — 10GB',
-            amount: 2500,
-            status: 'completed',
-            date: 'Yesterday, 4:18 PM',
-            currency_code: initialUserCurrency.code,
-            reference: 'KORAK-DAT-8391024'
-        },
-        {
-            id: 'txn_003',
-            type: 'credit',
-            category: 'funding',
-            description: 'Wallet Funding',
-            amount: 5000,
-            status: 'completed',
-            date: 'Yesterday, 11:03 AM',
-            currency_code: initialUserCurrency.code,
-            reference: 'KORAK-FND-7261905'
-        },
-        {
-            id: 'txn_004',
-            type: 'debit',
-            category: 'social',
-            description: 'Instagram Followers — 1K',
-            amount: 3000,
-            status: 'pending',
-            date: 'Aug 31, 2025',
-            currency_code: initialUserCurrency.code,
-            reference: 'KORAK-SMM-6152839'
-        },
-        {
-            id: 'txn_005',
-            type: 'debit',
-            category: 'airtime',
-            description: 'Glo Airtime — 0706 987 6543',
-            amount: 1000,
-            status: 'completed',
-            date: 'Aug 30, 2025',
-            currency_code: initialUserCurrency.code,
-            reference: 'KORAK-VTU-5049382'
-        }
-    ];
-
+    // Parse database transactions (returns empty array if no transactions exist yet)
     const transactionsList = dbTransactions && dbTransactions.length > 0 
         ? dbTransactions.slice(0, 5).map((txn: any) => ({
             id: txn.id || txn.reference,
-            type: txn.type || 'debit',
+            type: txn.type || (Number(txn.amount) > 0 ? 'credit' : 'debit'),
             category: txn.category || (txn.type === 'credit' ? 'funding' : 'service'),
             description: txn.description || 'Service Purchase',
-            amount: Number(txn.amount) || 0,
+            amount: Math.abs(Number(txn.amount)) || 0,
             status: txn.status || 'completed',
             date: new Date(txn.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ', ' + new Date(txn.created_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             currency_code: txn.currency_code || initialUserCurrency.code,
             reference: txn.reference || `KORAK-${txn.id}`
         }))
-        : sampleTransactions;
+        : [];
 
     const handleCopyRef = (refText: string) => {
         navigator.clipboard.writeText(refText);
@@ -553,8 +496,30 @@ export default function Dashboard() {
                     {/* Transactions Card / Desktop Table & Mobile List */}
                     <div className="bg-bg-surface border border-border-subtle rounded-xl shadow-xs overflow-hidden">
                         {transactionsList.length === 0 ? (
-                            <div className="p-10 text-center text-xs text-text-muted">
-                                No transactions yet. Your purchases and wallet activity will appear here.
+                            <div className="p-8 sm:p-12 text-center flex flex-col items-center justify-center max-w-md mx-auto">
+                                <div className="w-12 h-12 rounded-full bg-brand-subtle text-brand flex items-center justify-center mb-3.5 shadow-2xs">
+                                    <Receipt size={22} className="stroke-[2.2]" aria-hidden="true" />
+                                </div>
+                                <h4 className="text-sm font-bold text-text-primary tracking-tight">
+                                    No transactions yet
+                                </h4>
+                                <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">
+                                    When you fund your wallet or purchase airtime, data, and digital services, your activity will appear here.
+                                </p>
+                                <div className="flex items-center gap-2.5 mt-5">
+                                    <Link
+                                        href="/user/wallet/fund"
+                                        className="inline-flex items-center gap-1.5 bg-brand text-brand-foreground hover:bg-brand-hover active:scale-[0.96] text-xs font-bold px-3.5 py-2 rounded-lg transition-transform shadow-xs cursor-pointer"
+                                    >
+                                        <span>+ Add Money</span>
+                                    </Link>
+                                    <Link
+                                        href="/user/services/airtime"
+                                        className="inline-flex items-center gap-1.5 border border-border-subtle bg-bg-base hover:bg-bg-surface-hover active:scale-[0.96] text-text-primary text-xs font-semibold px-3.5 py-2 rounded-lg transition-colors cursor-pointer"
+                                    >
+                                        <span>Explore Services</span>
+                                    </Link>
+                                </div>
                             </div>
                         ) : (
                             <>

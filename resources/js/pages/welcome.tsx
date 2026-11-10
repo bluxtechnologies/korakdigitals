@@ -765,7 +765,7 @@ function LandingPageContent({ services = [], settings, metrics, announcement }: 
                     <div className="lg:col-span-2 space-y-4">
                         <div className="flex items-center gap-2.5">
                             <div className="w-8 h-8 rounded-md bg-brand text-brand-foreground flex items-center justify-center font-bold text-sm">
-                                C
+                                K
                             </div>
                             <span className="text-base font-black text-text-primary tracking-tight">
                                 {brandName}

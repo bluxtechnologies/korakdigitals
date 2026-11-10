@@ -80,7 +80,7 @@ export function useTransactionFlow(initialData: UniversalTransactionData | null 
             const reference = result.order?.public_reference
                 || result.order?.reference
                 || result.reference
-                || 'CLQ-' + Date.now().toString().slice(-8);
+                || 'KORAK-' + Date.now().toString().slice(-8);
 
             setData(prev => (prev ? {
                 ...prev,

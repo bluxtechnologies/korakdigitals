@@ -486,7 +486,7 @@ export default function AirtimePage(props: AirtimeProps) {
                                             {selectedNetwork.name}
                                         </span>
                                         <span className="text-[11px] font-mono text-text-muted block">
-                                            {normalizedPhone || '08012345678'}
+                                            {normalizedPhone || '—'}
                                         </span>
                                     </div>
                                 </div>
@@ -578,7 +578,7 @@ export default function AirtimePage(props: AirtimeProps) {
                                 <div className="flex items-center justify-between text-text-secondary">
                                     <span>Recipient</span>
                                     <span className="font-bold font-mono text-text-primary">
-                                        {normalizedPhone || '08012345678'}
+                                        {normalizedPhone || '—'}
                                     </span>
                                 </div>
 

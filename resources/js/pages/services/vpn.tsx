@@ -89,7 +89,7 @@ export default function SecureVpn() {
     const handleExecuteGenerate = async () => {
         flow.startProcessing();
 
-        const refId = 'CLQ-' + Math.floor(100000 + Math.random() * 900000);
+        const refId = 'KORAK-' + Math.floor(100000 + Math.random() * 900000);
         const configKey = `wg-${Math.random().toString(36).substring(2, 10)}@cipher-vpn-${location}.net:51820`;
 
         router.post('/user/services/order', {
