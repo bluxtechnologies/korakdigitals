@@ -238,7 +238,7 @@ class BillsController extends Controller
                 }
 
                 // Debit wallet
-                $publicRef = 'CLQ-VTU-' . rand(100000, 999999);
+                $publicRef = 'KORAK-VTU-' . rand(100000, 999999);
                 $idempotencyKey = 'vtu_debit_' . Str::random(16);
 
                 $this->walletService->debitWallet(
